@@ -75,9 +75,7 @@ resource "azurerm_data_factory_credential_user_managed_identity" "default" {
 # https://learn.microsoft.com/en-us/azure/templates/microsoft.datafactory/factories/linkedservices?pivots=deployment-language-arm-template#credentialreference-1
 
 resource "azurerm_data_factory_linked_custom_service" "this" {
-  # for_each = { for inst in var.lcs : inst.name => inst if inst.enabled && strcontains(var.identity_type, "UserAssigned")}
   for_each = { for inst in var.lcs : inst.name => inst if inst.enabled && strcontains(var.identity_type, "UserAssigned")}
-  # name            = "${each.value.name}-ls-custom-service" // generowac automatycznie w local
   dynamic "integration_runtime" {
     for_each = each.value.integration_runtime[*]
     content {
@@ -91,10 +89,6 @@ resource "azurerm_data_factory_linked_custom_service" "this" {
   type            = each.value.type
   type_properties_json = each.value.type_properties_json
   parameters = each.value.parameter
-    #  type_properties_json = templatefile("${path.module}/template/${each.value.type}.tftpl", {
-    # credential = local.umi_credential_name
-    # vault_uri = each.value.vault_uri
-  # })
 }
 
 
