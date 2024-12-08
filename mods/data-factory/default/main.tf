@@ -75,7 +75,7 @@ resource "azurerm_data_factory_credential_user_managed_identity" "default" {
 # https://learn.microsoft.com/en-us/azure/templates/microsoft.datafactory/factories/linkedservices?pivots=deployment-language-arm-template#credentialreference-1
 
 resource "azurerm_data_factory_linked_custom_service" "this" {
-  for_each = { for inst in var.lcs : inst.name => inst if inst.enabled && strcontains(var.identity_type, "UserAssigned")}
+  for_each = { for inst in var.linked_custom_service : inst.name => inst if inst.enabled && strcontains(var.identity_type, "UserAssigned")}
   dynamic "integration_runtime" {
     for_each = each.value.integration_runtime[*]
     content {

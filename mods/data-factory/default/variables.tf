@@ -79,6 +79,23 @@ default = [ {
 } ]
 }
 
+variable "linked_custom_service" {
+type = list(object({
+  name                  = optional(string)
+    type                  = optional(string)
+    description = optional(string)
+    enabled = optional(bool)
+    integration_runtime = optional(string)
+    type_properties_json  = optional(string)
+    parameter = optional(map(string))
+    annotations = optional(list(string))
+    ir_parameter = optional(map(string))
+})
+)
+default = [ {
+} ]
+}
+
 
 
 # variable "lcs" {
@@ -130,9 +147,9 @@ default = [ {
 # }
 
 
-variable "default_kv_name" {
-  type        = string
-}
+# variable "default_kv_name" {
+#   type        = string
+# }
 
 variable "default_kv_id" {
   type        = string

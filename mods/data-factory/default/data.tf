@@ -5,8 +5,9 @@ data "azurerm_user_assigned_identity" "umi" {
   resource_group_name = var.resource_group_name
 }
 
+// try(regex("[^/]+$", local.umi_identity_id))
 
 data "azurerm_key_vault" "kivi" {
-  name = var.default_kv_name
+  name = try(regex("[^/]+$", var.default_kv_id))
   resource_group_name = var.resource_group_name
 }
