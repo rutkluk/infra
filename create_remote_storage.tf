@@ -206,7 +206,38 @@ module "uami" {
   name                = "id5617"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
+
+  scopes = {
+    1 = {
+    scope     = azurerm_key_vault.kv.id
+    role_name = "Key Vault Secrets User"
+    }
+    2 = {
+      scope     = azurerm_key_vault.kv.id
+      role_name = "Key Vault Crypto User"
+    }
+    3 = {
+      scope     = azurerm_key_vault.kv.id
+      role_name = "Key Vault Certificate User"
+  }}
 }
+
+# resource "azurerm_role_assignment" "umid-key-vault-secrets-user" {
+#   scope                = azurerm_key_vault.kv.id
+#   principal_id         = module.uami.identity_principal_id
+#   role_definition_name = "Key Vault Secrets User"
+# }
+# resource "azurerm_role_assignment" "umid-key-vault-crypto-user" {
+#   scope                = azurerm_key_vault.kv.id
+#   principal_id         = module.uami.identity_principal_id
+#   role_definition_name = "Key Vault Crypto User"
+# }
+# resource "azurerm_role_assignment" "umid-key-vault-certificate-user" {
+#   scope                = azurerm_key_vault.kv.id
+#   principal_id         = module.uami.identity_principal_id
+#   role_definition_name = "Key Vault Certificate User"
+# }
+
 
 module "adf" {
   source                = "./mods/data-factory/default"

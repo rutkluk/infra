@@ -63,37 +63,35 @@ variable "purview_id" {
 }
 
 variable "lcs" {
-type = list(object({
-  name                  = optional(string)
-    type                  = optional(string)
-    description = optional(string)
-    enabled = optional(bool)
-    integration_runtime = optional(string)
-    type_properties_json  = optional(string)
-    parameter = optional(map(string))
-    annotations = optional(list(string))
-    ir_parameter = optional(map(string))
-})
-)
-default = [ {
-} ]
+  type = list(object({
+    name                 = optional(string)
+    type                 = optional(string)
+    description          = optional(string)
+    enabled              = optional(bool)
+    integration_runtime  = optional(string)
+    type_properties_json = optional(string)
+    parameter            = optional(map(string))
+    annotations          = optional(list(string))
+    ir_parameter         = optional(map(string))
+    })
+  )
+  default = [{
+  }]
 }
 
 variable "linked_custom_service" {
-type = list(object({
-  name                  = optional(string)
-    type                  = optional(string)
-    description = optional(string)
-    enabled = optional(bool)
-    integration_runtime = optional(string)
-    type_properties_json  = optional(string)
-    parameter = optional(map(string))
-    annotations = optional(list(string))
-    ir_parameter = optional(map(string))
-})
-)
-default = [ {
-} ]
+  type = list(object({
+    name                 = optional(string)
+    type                 = optional(string)
+    description          = optional(string, "Managed By Terraform.")
+    deploy              = optional(bool)
+    integration_runtime  = optional(string)
+    type_properties_json = optional(string)
+    parameter            = optional(map(string))
+    annotations          = optional(list(string))
+    })
+  )
+  default = null
 }
 
 
@@ -152,5 +150,5 @@ default = [ {
 # }
 
 variable "default_kv_id" {
-  type        = string
+  type = string
 }

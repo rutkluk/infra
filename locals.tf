@@ -4,7 +4,7 @@ locals {
       name                 = "KeyVault"
       type                 = "AzureKeyVault"
       description          = "managed by terraform"
-      enabled              = true
+      deploy               = true
       type_properties_json = <<JSON
         {
           "baseUrl" : "@{linkedService().KeyVaultBaseUrl}",
@@ -15,16 +15,14 @@ locals {
         }
       JSON
       parameter = {
-        KeyVaultBaseUrl      = azurerm_key_vault.kv.vault_uri
-        AnotherTestParameter = "test map(string)"
+        KeyVaultBaseUrl = azurerm_key_vault.kv.vault_uri
       }
     }
     ,
     {
       name                 = "SqlServerSQLAuth"
       type                 = "SqlServer"
-      enabled              = true
-      description          = "Managed By Terraform"
+      deploy               = true
       integration_runtime  = "SelfHostedRuntimeOnPrem"
       type_properties_json = <<JSON
         {
@@ -60,22 +58,21 @@ locals {
 
       name                 = "Dataverse"
       type                 = "CommonDataServiceForApps"
-      enabled              = true
+      deploy               = true
       integration_runtime  = "integrationRuntime1"
-      description          = "Generic CommonDataServiceForApps"
       type_properties_json = <<JSON
         {
           "deploymentType" : "Online",
           "serviceUri" : "https://google.crm4.com",
           "authenticationType" : "ManagedIdentity",
           "credential": {
-                "referenceName": "id5617-default-credentials",
+                "referenceName": "${module.adf.uami_credential_reference_name}",
                 "type": "CredentialReference"
           }
         }
       JSON
       parameter = {
-        AnotherTestParameter = "test map(string)"
+        TestParameter = "Test map(string)"
       }
     }
   ]

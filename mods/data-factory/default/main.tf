@@ -46,9 +46,9 @@ resource "azurerm_data_factory" "this" {
     }
   }
   global_parameter {
-    name = "default_key_vault_uri"
-    type = "String"
-    value = "${data.azurerm_key_vault.kivi.vault_uri}"
+    name  = "default_key_vault_uri"
+    type  = "String"
+    value = data.azurerm_key_vault.kivi.vault_uri
   }
 
   dynamic "github_configuration" {
@@ -75,20 +75,19 @@ resource "azurerm_data_factory_credential_user_managed_identity" "default" {
 # https://learn.microsoft.com/en-us/azure/templates/microsoft.datafactory/factories/linkedservices?pivots=deployment-language-arm-template#credentialreference-1
 
 resource "azurerm_data_factory_linked_custom_service" "this" {
-  for_each = { for inst in var.linked_custom_service : inst.name => inst if inst.enabled && strcontains(var.identity_type, "UserAssigned")}
+  for_each = { for inst in var.linked_custom_service : inst.name => inst if inst.deploy && strcontains(var.identity_type, "UserAssigned") }
   dynamic "integration_runtime" {
     for_each = each.value.integration_runtime[*]
     content {
-        name = each.value.integration_runtime
-        parameters = each.value.ir_parameter
+      name       = each.value.integration_runtime
     }
   }
-  name = each.value.name
-  description = each.value.description
-  data_factory_id = azurerm_data_factory.this.id
-  type            = each.value.type
+  name                 = each.value.name
+  description          = each.value.description
+  data_factory_id      = azurerm_data_factory.this.id
+  type                 = each.value.type
   type_properties_json = each.value.type_properties_json
-  parameters = each.value.parameter
+  parameters           = each.value.parameter
 }
 
 
@@ -116,11 +115,6 @@ resource "azurerm_data_factory_linked_custom_service" "this" {
 
 # foreach passed MI create set of roles provided
 
-resource "azurerm_role_assignment" "umid-kv-user" {
-  scope                = var.default_kv_id
-  principal_id         = data.azurerm_user_assigned_identity.umi.principal_id
-  role_definition_name = "Key Vault Secrets User"
-}
 
 /*
 
@@ -143,16 +137,16 @@ resource "azurerm_data_factory_integration_runtime_self_hosted" "self_hosted_ir"
   #   if ir.is_azure == false && var.deploy_data_factory == true
   # }
   # name                = each.value.name
-   name                = "SelfHostedRuntimeOnPrem"
+  name = "SelfHostedRuntimeOnPrem"
   # data_factory_id     = azurerm_data_factory.data_factory[0].id
-    data_factory_id     = azurerm_data_factory.this.id
+  data_factory_id = azurerm_data_factory.this.id
 
   #resource_group_name = var.resource_group_name
 
   depends_on = [
     azurerm_data_factory.this
   ]
-} 
+}
 
 
 

@@ -1,7 +1,7 @@
 locals {
   name                = "az-adf-dev-westeurope-001"
   umi_identity_id     = try(tolist(var.identity_ids)[0])
-  umi_name = try(regex("[^/]+$", local.umi_identity_id))
+  umi_name            = try(regex("[^/]+$", local.umi_identity_id))
   umi_credential_name = try("${local.umi_name}-default-credentials")
 
 
