@@ -131,18 +131,8 @@ resource "azurerm_data_factory_linked_custom_service" "this" {
 
 
 resource "azurerm_data_factory_integration_runtime_self_hosted" "self_hosted_ir" {
-  # for_each = {
-  #   for ir in local.integration_runtimes :
-  #   ir.short_name => ir
-  #   if ir.is_azure == false && var.deploy_data_factory == true
-  # }
-  # name                = each.value.name
   name = "SelfHostedRuntimeOnPrem"
-  # data_factory_id     = azurerm_data_factory.data_factory[0].id
   data_factory_id = azurerm_data_factory.this.id
-
-  #resource_group_name = var.resource_group_name
-
   depends_on = [
     azurerm_data_factory.this
   ]
