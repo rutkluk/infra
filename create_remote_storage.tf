@@ -208,15 +208,15 @@ module "uami" {
   location            = azurerm_resource_group.this.location
 
   scopes = {
-    1 = {
+    "kv_secrets_user" = {
     scope     = azurerm_key_vault.kv.id
     role_name = "Key Vault Secrets User"
     }
-    2 = {
+    "kv_crypto_user" = {
       scope     = azurerm_key_vault.kv.id
       role_name = "Key Vault Crypto User"
     }
-    3 = {
+    "kv_certificate_user" = {
       scope     = azurerm_key_vault.kv.id
       role_name = "Key Vault Certificate User"
   }}
